@@ -16,7 +16,9 @@ def calculate_theta(line):
 
 
 def glue_lines(start1, end1, start2, end2):
-    lines = [[start1[0], start1[1], start2[0], start2[1]],
+    lines = [[start1[0], start1[1], end1[0], end1[1]],
+             [start2[0], start2[1], end2[0], end2[1]],
+             [start1[0], start1[1], start2[0], start2[1]],
              [start1[0], start1[1], end2[0], end2[1]],
              [end1[0], end1[1], start2[0], start2[1]],
              [end1[0], end1[1], end2[0], end2[1]]]
@@ -41,7 +43,7 @@ class GlueLines:
                 end_i = (self._lines[i][2], self._lines[i][3])
                 start_j = (self._lines[j][0], self._lines[j][1])
                 end_j = (self._lines[j][2], self._lines[j][3])
-                if close_dotes(start_i, start_j) and close_dotes(end_i, end_j):
+                if close_dotes(start_i, start_j, self._threshold) and close_dotes(end_i, end_j, self._threshold):
                     to_del.add(j)
         self._lines = np.array([self._lines[i] for i in range(len(self._lines)) if i not in to_del])
 
@@ -53,7 +55,7 @@ class GlueLines:
         ends = [[line[2], line[3]] for line in pair_lines]
         for i in range(0, 21):
             med = [(starts[0][0] * i + ends[0][0] * (20 - i)) / 20, (starts[0][1] * i + ends[0][1] * (20 - i)) / 20]
-            if close_dotes(med, starts[1]) or close_dotes(med, ends[1]):
+            if close_dotes(med, starts[1], self._threshold) or close_dotes(med, ends[1], self._threshold):
                 return [np.array(glue_lines(starts[0], ends[0], starts[1], ends[1])), None]
         return pair_lines
 
