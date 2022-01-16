@@ -5,12 +5,8 @@ class GraphToSmiles:
         self._breaks = {node: [] for node in graph.nodes}
         self._deleted_edges = set()
         self._break = 0
-        self._typing = {'OH': 'O', 'O': 'O', 'NH': 'N', 'N': 'N', 'C': 'C', 'Cl': 'Cl'}
         self._tree = {node: [] for node in graph.nodes}
         self._root = None
-
-    def get_type(self, node):
-        return self._typing[node[:node.find('-')]]
 
     def add_break(self, nodes):
         self._break += 1
@@ -48,11 +44,11 @@ class GraphToSmiles:
                 left = ''
                 right = ''
             accum += left + u[0] + self.build_smiles(u[1]) + right
-        return self.get_type(node) + ''.join(self._breaks[node]) + accum
+        return node[:node.find('-')] + ''.join(self._breaks[node]) + accum
 
     def get_smiles(self):
         for node in self._graph.nodes:
-            if self.get_type(node) == 'C':
+            if node[:node.find('-')] == 'C':
                 self._root = node
                 break
         self.dfs(self._root, None)

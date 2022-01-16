@@ -60,6 +60,9 @@ class LinesToGraph:
             if (nodes[0] is not None) and (nodes[1] is not None):
                 self._graph.add_edge(nodes[0], nodes[1])
 
+    def get_nodes(self):
+        return self._node_pos.values()
+
     def make_graph(self):
         self.make_nodes_from_group()
         self.make_nodes_from_intersections()
